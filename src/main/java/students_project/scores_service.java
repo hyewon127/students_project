@@ -18,10 +18,10 @@ public class scores_service {
 	}
 	
 	// 성적 정보 db 등록(insert)
-	public String scores_insert(int Korean, int English, int Math) {
+	public String scores_insert(student_request_DTO dto) {
 		String result = "";
 		//성적 평균 평균 계산 
-		double average = (Korean+English+Math)/3.0;
+		double average = (dto.getKorean()+dto.getEnglish()+dto.getMath())/3.0;
 		//국어 등급 계산(if-else) 
 		String grade = "";
 		if(average >= 90) {
@@ -40,9 +40,9 @@ public class scores_service {
 		// db와 연동하는 구현 로직
 		try (Connection conn = dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			// ? 값에 맞는 변수들 입력
-			pstmt.setInt(1, Korean);
-			pstmt.setInt(2, English);
-			pstmt.setInt(3, Math);
+			pstmt.setInt(1, dto.getKorean());
+			pstmt.setInt(2, dto.getEnglish());
+			pstmt.setInt(3, dto.getMath());
 			pstmt.setDouble(4, average);
 			pstmt.setString(5, grade);
 			// insert하는 executeUpdate 함수 사용 
