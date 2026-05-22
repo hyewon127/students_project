@@ -49,7 +49,7 @@ public class scores_service {
 			// insert하는 executeUpdate 함수 사용 
 			pstmt.executeUpdate();
 			// 학생 평균 및 등급 알 수 있는 result 값 넣음 + 평균은 소수점 2개까지 표시 되게 함. 
-			result = "학생 평균 성적 "+String.format("%.2f", average)+"점, 성적 등급 "+grade;
+			result = dto.getName() + " 학생 평균 성적 "+String.format("%.2f", average)+"점, 성적 등급 "+grade;
 		} catch (Exception e) {
 			// DB 조회 에러 발생할 경우 확인하는 catch 로직 (getmessage: 에러 핵심 메세지, printStackTrace: 에러 위치 추적)
 			result = "DB 조회 에러 발생: " + e.getMessage();
