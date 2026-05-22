@@ -19,8 +19,8 @@
 		<constructor-arg ref="dataSource" />
 	</bean>
 	<bean id="score_service"
-		class="students_project.score_service">
+		class="students_project.scores_service">
 		<constructor-arg ref="dataSource" />
 	</bean>
-
+	
 </beans> 
