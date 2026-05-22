@@ -36,15 +36,16 @@ public class scores_service {
 			grade = "F";	
 		}
 		// sql에 실제로 입력될 쿼리 작성
-		String sql = "INSERT INTO scores VALUES(?,?,?,?,?)";
+		String sql = "INSERT INTO scores VALUES(?,?,?,?,?,?)";
 		// db와 연동하는 구현 로직
 		try (Connection conn = dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			// ? 값에 맞는 변수들 입력
-			pstmt.setInt(1, dto.getKorean());
-			pstmt.setInt(2, dto.getEnglish());
-			pstmt.setInt(3, dto.getMath());
-			pstmt.setDouble(4, average);
-			pstmt.setString(5, grade);
+			pstmt.setString(1, dto.getName());
+			pstmt.setInt(2, dto.getKorean());
+			pstmt.setInt(3, dto.getEnglish());
+			pstmt.setInt(4, dto.getMath());
+			pstmt.setDouble(5, average);
+			pstmt.setString(6, grade);
 			// insert하는 executeUpdate 함수 사용 
 			pstmt.executeUpdate();
 			// 학생 평균 및 등급 알 수 있는 result 값 넣음 + 평균은 소수점 2개까지 표시 되게 함. 
