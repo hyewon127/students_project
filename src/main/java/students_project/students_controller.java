@@ -1,5 +1,7 @@
 package students_project;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,9 @@ public class students_controller {
 	
 	@Autowired
 	private delete_service delete_service;  
+	
+	@Autowired
+	private select_service select_service;
 	
 	//post 학생 정보 및 성적 입력(get)
 	@GetMapping(value = "/students")
@@ -39,11 +44,19 @@ public class students_controller {
 	@PostMapping(value = "/delete")
 	public String delete(String Student_number, Model model) {
 		// 삭제 서비스 호출
-		String result = delete_service.scores_delete(Student_number);
-		model.addAttribute("delete", result);
+		String Deleteresult = delete_service.scores_delete(Student_number);
+		model.addAttribute("delete", Deleteresult);
 		//jps 파일 
 		return "student_view";
 	}
 	
-}	
-
+	@PostMapping(value = "/select")
+	public String select(String Student_number, Model model) {
+		//조회 서비스 호출
+		Map<String, Object> Selectresult = select_service.scores_select(Student_number);
+		model.addAttribute("select", Selectresult);
+		//jps 파일 
+		return "student_view";
+		
+	}
+}
