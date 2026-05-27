@@ -35,5 +35,20 @@ public class student_request_DTO {
 	public void setMath(int math) {
 		this.math = math;
 	}
-	private int math;
+	private int math; 
+	
+	private int science;
+	public int getScience() {
+		return science;
+	}
+	public void setScience(int science) {
+		this.science = science;
+	}
+	public int getCreated_at() {
+		return created_at;
+	}
+	public void setCreated_at(int created_at) {
+		this.created_at = created_at;
+	}
+	private int created_at;
 }

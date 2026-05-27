@@ -13,7 +13,10 @@ public class students_controller {
 	private students_service students_service;
 	
 	@Autowired
-	private score_service score_service;
+	private scores_service scores_service; 
+	
+	@Autowired
+	private delete_service delete_service;  
 	
 	//post 학생 정보 및 성적 입력(get)
 	@GetMapping(value = "/students")
@@ -26,10 +29,19 @@ public class students_controller {
 	// dto(박스) 를 만들어서 가져올 변수를 모두 매개변수로 넣음. 
 	public String students(student_request_DTO dto, Model model) {
 		students_service.students_insert(dto.getName(),dto.getStudent_number()); 
-		String scoreResult = score_service.scores_insert(dto);
+		String scoreResult = scores_service.scores_insert(dto);
 		model.addAttribute("msg", scoreResult);
 		
 		//jsp 파일를 화면에 띄움
+		return "student_view";
+	}
+	
+	@PostMapping(value = "/delete")
+	public String delete(String Student_number, Model model) {
+		// 삭제 서비스 호출
+		String result = delete_service.scores_delete(Student_number);
+		model.addAttribute("delete", result);
+		//jps 파일 
 		return "student_view";
 	}
 	

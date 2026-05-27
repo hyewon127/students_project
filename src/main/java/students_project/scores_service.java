@@ -21,7 +21,7 @@ public class scores_service {
 	public String scores_insert(student_request_DTO dto) {
 		String result = "";
 		//성적 평균 평균 계산 
-		double average = (dto.getKorean()+dto.getEnglish()+dto.getMath())/3.0;
+		double average = (dto.getKorean()+dto.getEnglish()+dto.getMath()+dto.getScience())/4.0;
 		//국어 등급 계산(if-else) 
 		String grade = "";
 		if(average >= 90) {
@@ -36,16 +36,18 @@ public class scores_service {
 			grade = "F";	
 		}
 		// sql에 실제로 입력될 쿼리 작성
-		String sql = "INSERT INTO scores VALUES(?,?,?,?,?,?)";
+		String sql = "INSERT INTO scores VALUES(?,?,?,?,?,?,?, now())";
+		
 		// db와 연동하는 구현 로직
 		try (Connection conn = dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			// ? 값에 맞는 변수들 입력
-			pstmt.setString(1, dto.getName());
+			// 쿼리문 ? 값에 맞는 변수들 set 으로 입력받기
+			pstmt.setString(1, dto.getStudent_number());
 			pstmt.setInt(2, dto.getKorean());
 			pstmt.setInt(3, dto.getEnglish());
 			pstmt.setInt(4, dto.getMath());
-			pstmt.setDouble(5, average);
-			pstmt.setString(6, grade);
+			pstmt.setInt(5, dto.getScience());
+			pstmt.setDouble(6, average);
+			pstmt.setString(7, grade);
 			// insert하는 executeUpdate 함수 사용 
 			pstmt.executeUpdate();
 			// 학생 평균 및 등급 알 수 있는 result 값 넣음 + 평균은 소수점 2개까지 표시 되게 함. 

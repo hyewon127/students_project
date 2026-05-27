@@ -22,5 +22,9 @@
 		class="students_project.scores_service">
 		<constructor-arg ref="dataSource" />
 	</bean>
+	<bean id="delete_service"
+		class="students_project.delete_service">
+		<constructor-arg ref="dataSource" />
+	</bean>
 	
 </beans> 
