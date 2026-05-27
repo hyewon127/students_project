@@ -18,7 +18,7 @@ public class delete_service {
 	//성적 정보 삭제(delete) 쿼리
 	public String scores_delete(String Student_number) {
 		// scores 작성한 학번 입력 받아 해당 데이터 삭제하는 쿼리문
-		String sql = "DELETE FROM scores WHERE student_number = ?";
+		String sql = "DELETE FROM students WHERE student_number = ?";
 		// db와 연동하는 구현 로직
 		try (Connection conn = dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			// 쿼리문 ? 맞는 변수 값 set 으로 가져오기 
@@ -27,7 +27,7 @@ public class delete_service {
 	            int affected_rows = pstmt.executeUpdate();
 	            // 변환된 값이 0이상으로 있으면 return(삭제완료), 없으면 (데이터 없음)
 	            if (affected_rows > 0) {
-	                return "가장 최근에 등록된 성적 정보가 삭제되었습니다.";
+	                return "성적 정보가 삭제 되었습니다.";
 	            } else {
 	                return "삭제할 데이터가 없습니다.";
 	            }

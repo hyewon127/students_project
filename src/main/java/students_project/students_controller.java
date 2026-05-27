@@ -1,62 +1,61 @@
 package students_project;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class students_controller {
 	// 학생 정보 서비스, 성적 서비스 autowired 로 가져오기
-	@Autowired
-	private students_service students_service;
+	@Autowired private students_service students_service;
 	
-	@Autowired
-	private scores_service scores_service; 
+	@Autowired private scores_service scores_service; 
 	
-	@Autowired
-	private delete_service delete_service;  
+	@Autowired private delete_service delete_service;  
 	
-	@Autowired
-	private select_service select_service;
+	@Autowired private students_update_service students_update_service;
 	
-	//post 학생 정보 및 성적 입력(get)
-	@GetMapping(value = "/students")
-	public String studentsForm() {
-	    return "student_view"; // 입력창이 있는 JSP 이름
-	}
-	
-	// 데이터를 보냈을 때 처리하는 역할(post)
-	@PostMapping(value = "/students")
-	// dto(박스) 를 만들어서 가져올 변수를 모두 매개변수로 넣음. 
-	public String students(student_request_DTO dto, Model model) {
-		students_service.students_insert(dto.getName(),dto.getStudent_number()); 
-		String scoreResult = scores_service.scores_insert(dto);
-		model.addAttribute("msg", scoreResult);
-		
-		//jsp 파일를 화면에 띄움
-		return "student_view";
-	}
-	
-	@PostMapping(value = "/delete")
-	public String delete(String Student_number, Model model) {
-		// 삭제 서비스 호출
-		String Deleteresult = delete_service.scores_delete(Student_number);
-		model.addAttribute("delete", Deleteresult);
-		//jps 파일 
-		return "student_view";
-	}
-	
-	@PostMapping(value = "/select")
-	public String select(String Student_number, Model model) {
-		//조회 서비스 호출
-		Map<String, Object> Selectresult = select_service.scores_select(Student_number);
-		model.addAttribute("select", Selectresult);
-		//jps 파일 
-		return "student_view";
-		
-	}
+	// 1-1. 등록 페이지(입력 폼)만 보여주는 GET 메서드
+    @GetMapping(value = "/students")
+    public String showForm() {
+        return "student_view"; // 입력 폼 JSP로 이동
+    }
+
+    // 1-2. 실제 데이터를 저장하는 POST 메서드
+    @PostMapping(value = "/students")
+    public String insertData(student_request_DTO dto, Model model) {
+        String msg = students_service.students_insert(dto.getName(), dto.getStudentNumber());
+        scores_service.scores_insert(dto);
+        model.addAttribute("msg", msg);
+        model.addAttribute("student", dto); // dto 객체를 통째로 넘김 
+        return "result_view"; 
+    }
+
+    // 2. 관리 페이지 진입 (목록 조회)
+    @GetMapping(value = "/manage")
+    public String manageForm(Model model) {
+        // students_service에 getAllStudents() 메서드를 추가해야 합니다 (아래 설명 참조)
+        model.addAttribute("list", students_service.getAllStudents());
+        return "manage_view";
+    }
+
+    // 3. 삭제 처리 (자동으로 학번 전달받음)
+    @PostMapping(value = "/delete")
+    public String delete(@RequestParam("studentNumber") String studentNumber, Model model) {
+        // 여기서 studentNumber는 JSP에서 넘어온 해당 행의 학번입니다.
+        model.addAttribute("delete", delete_service.scores_delete(studentNumber));
+        model.addAttribute("list", students_service.getAllStudents());
+        return "manage_view";
+    }
+    
+    // 4. 수정 처리 (관리 페이지에서 호출)
+    @PostMapping(value = "/update")
+    public String update(@RequestParam("name") String name, @RequestParam("studentNumber") String studentNumber, Model model) {
+        model.addAttribute("update", students_update_service.students_update(name, studentNumber));
+        model.addAttribute("list", students_service.getAllStudents());
+        return "manage_view";
+    }
 }
